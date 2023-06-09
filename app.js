@@ -33,7 +33,7 @@ async function findMyCity() {
     const geoApiUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lattitude}&longitude=${longitude}&localityLanguage=en`;
     const response = await fetch(geoApiUrl);
     const data = await response.json();
-    status.value = data.city;
+    status.value = data.principalSubdivision;
     checkWeather();
   }
   const error = () => {
