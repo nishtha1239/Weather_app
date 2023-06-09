@@ -1,5 +1,5 @@
 const apiKey = "e3b66080586cf1f120e5b04b820dbc9f";
-const serachBtn = document.querySelector(".search button");
+const searchBtn = document.querySelector(".search button");
 async function checkWeather() {
   const query = document.querySelector(".search input").value;
   const url =
@@ -21,6 +21,26 @@ async function checkWeather() {
   weatherIcon.setAttribute("src", imgUrl);
   weatherIcon.classList.remove("icon2");
 }
-serachBtn.addEventListener("click", function () {
+searchBtn.addEventListener("click", function () {
   checkWeather();
 });
+
+async function findMyCity() {
+  const status = document.querySelector("input");
+  async function success(position) {
+    const lattitude = position.latitude;
+    const longitude = position.longitude;
+    const geoApiUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lattitude}&longitude=${longitude}&localityLanguage=en`;
+    const response = await fetch(geoApiUrl);
+    const data = await response.json();
+    status.value = data.city;
+    checkWeather();
+  }
+  const error = () => {
+    status.value = "Unable to retrieve location";
+  };
+  navigator.geolocation.getCurrentPosition(success, error);
+}
+window.onload = findMyCity();
+// document.querySelector("input").addEventListener("load", findMyCity);
+// };
